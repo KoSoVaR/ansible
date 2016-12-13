@@ -61,9 +61,11 @@ First test the script by running ``/etc/ansible/cobbler.py`` directly.   You sho
 Let's explore what this does.  In Cobbler, assume a scenario somewhat like the following::
 
     cobbler profile add --name=webserver --distro=CentOS6-x86_64
-    cobbler profile edit --name=webserver --mgmt-classes="webserver" --ksmeta="a=2 b=3"
-    cobbler system edit --name=foo --dns-name="foo.example.com" --mgmt-classes="atlanta" --ksmeta="c=4"
-    cobbler system edit --name=bar --dns-name="bar.example.com" --mgmt-classes="atlanta" --ksmeta="c=5"
+    cobbler profile edit --name=webserver --owners="webserver" --ksmeta="a=2 b=3"
+    cobbler system edit --name=foo --dns-name="foo.example.com" --owners="atlanta" --ksmeta="c=4"
+    cobbler system edit --name=bar --dns-name="bar.example.com" --owners="atlanta" --ksmeta="c=5"
+
+Note:  In cobbler.py there is a variable defined orderby_keyname.  This was previously set to mgmt_classes and is now definitely owners.
 
 In the example above, the system 'foo.example.com' will be addressable by ansible directly, but will also be addressable when using the group names 'webserver' or 'atlanta'.  Since Ansible uses SSH, we'll try to contact system foo over 'foo.example.com', only, never just 'foo'.  Similarly, if you try "ansible foo" it wouldn't find the system... but "ansible 'foo*'" would, because the system DNS name starts with 'foo'.
 
