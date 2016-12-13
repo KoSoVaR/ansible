@@ -197,6 +197,10 @@ class CobblerInventory(object):
             profile = host['profile']
             classes = host[orderby_keyname]
 
+            if classes == '<<inherit>>':
+                classes = []
+                classes.append('<<inherit>>'
+                               
             if status not in self.inventory:
                 self.inventory[status] = []
             self.inventory[status].append(dns_name)
